@@ -2,6 +2,8 @@ const models = require('../models');
 
 const Domo = models.Domo;
 
+const natures = Domo.natures;
+
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -9,17 +11,24 @@ const makerPage = (req, res) => {
       return res.status(400).json({ error: 'An error occured' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), domos: docs, natures });
   });
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
+  if (!req.body.name || !req.body.age || !req.body.nature) {
     return res.status(400).json({ error: 'GRR! name and age required' });
   }
+
+  const natureCheck = Domo.checkNature(req.body.nature);
+  if (natureCheck === undefined) {
+    return res.status(400).json({ error: 'GRR! invalid nature' });
+  }
+
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    nature: natureCheck,
     owner: req.session.account._id,
   };
 
@@ -46,11 +55,11 @@ const makeDomo = (req, res) => {
 const getDomos = (request, response) => {
   const req = request;
   const res = response;
-  
+
   return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
-      return res.sataus(400).json({ error: 'An error occured'});
+      return res.sataus(400).json({ error: 'An error occured' });
     }
     return res.json({ domos: docs });
   });

@@ -50,7 +50,7 @@ nav:nth-child(1) {
 .domoForm {
     border: 2px solid #338acc;
     height: 35px;
-    width: 700px;
+    width: 780px;
     margin-top:0px;
     padding-top:10px;
     background-color: #55acee;
@@ -211,7 +211,11 @@ nav:nth-child(1) {
     overflow: hidden;
 }
 
-.domo:hover {
+.selected {
+  border-color: darkgoldenrod;
+}
+
+.domo:hover:not(.selected){
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
@@ -244,7 +248,7 @@ h3.domoName {
     font-size: 1.5em;
 }
 
-h3.domoAge {
+h3.domoAge, h3.domoNature {
     float:right;
     text-align: left;
     width: 100px;
